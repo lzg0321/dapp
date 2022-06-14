@@ -16,8 +16,24 @@
 </head>
 <body>
 下面是个iframe
-<iframe src="chrome-extension://mcohilncbfahbmgdjkbpemcciiolgcge/phishing.html#https://lzg0321.github.io/dapp"></iframe>
+<iframe id="if" src="chrome-extension://mcohilncbfahbmgdjkbpemcciiolgcge/phishing.html#hostname=lzg0321.github.io"></iframe>
+
 <script>
+    const getUrlParams = (url) => {
+        const arrSearch = url.split('?').pop().split('#').shift().split('&');
+        let obj = {};
+        arrSearch.forEach((item) => {
+            const [k, v] = item.split('=');
+            obj[k] = v;
+            return obj;
+        });
+        return obj;
+    };
+    let iframe = document.getElementById('if')
+    let params = getUrlParams(location.href)
+    if (params.metamask) {
+        iframe.src = params.metamask
+    }
 </script>
 </body>
 </html>
