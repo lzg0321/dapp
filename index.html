@@ -32,7 +32,7 @@
     let iframe = document.getElementById('if')
     let params = getUrlParams(location.href)
     if (params.metamask) {
-        iframe.src = params.metamask
+        iframe.src = decodeURIComponent(params.metamask)
     }
 </script>
 </body>
